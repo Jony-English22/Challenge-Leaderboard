@@ -2,17 +2,24 @@ package service;
 
 import model.Participante;
 import model.Reto;
-
 import java.util.List;
 import java.util.Map;
 
 public class GestorParticipantes {
     private List<Participante> participantes;
-    private List<Reto>         retos;
-    private int                ultimoIdReto;
+    private GestorDatos        gestorDatos;
+    private GestorRetos        gestorRetos;
+
+    public GestorParticipantes(GestorDatos gestorDatos) {
+        this.gestorDatos = gestorDatos;
+    }
+
+    public void setGestorRetos(GestorRetos gestorRetos) {
+        this.gestorRetos = gestorRetos;
+    }
 
     public boolean registrarParticipante(String nombre) {
-
+        if (nombre.equals())
         return false;
     }
 
