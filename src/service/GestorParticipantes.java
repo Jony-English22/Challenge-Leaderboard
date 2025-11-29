@@ -2,6 +2,8 @@ package service;
 
 import model.Participante;
 import model.Reto;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,16 +21,43 @@ public class GestorParticipantes {
     }
 
     public boolean registrarParticipante(String nombre) {
-        if (nombre.equals())
-        return false;
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+        for (Participante p: datos.participantes) {
+            if (p.getNombre().equals(nombre)) {
+                participantes.add(new Participante(nombre));
+                return false;
+            }
+        }
+
+        Participante nuevo = new Participante(nombre);
+        datos.participantes.add(nuevo);
+        gestorDatos.guardarDatos(datos);
+        return true;
+
     }
 
     public boolean eliminarParticipante(String nombre) {
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+        for (int i = 0; i < datos.participantes.size(); i++) {
+            Participante p = datos.participantes.get(i);
+            if (p.getNombre().equals(nombre)) {
+                datos.participantes.remove(i);
+                gestorDatos.guardarDatos(datos);
+                return false;
+            }
+        }
         return true;
     }
 
     public Participante obtenerParticipante(String nombre) {
-        return ;
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+        for (int i = 0; i < datos.participantes.size(); i++) {
+            Participante p = datos.participantes.get(i);
+            if (p.getNombre().equals(nombre)) {
+                return p;
+            }
+        }
+        return null;
     }
 
     public List<Participante> listarParticipantes() {
