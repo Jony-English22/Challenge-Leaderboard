@@ -20,9 +20,18 @@ public class GestorRetos {
 
     public Reto crearReto(String nombre, String descripcion, int puntosMax, int tiempo) {
         GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
-        ultimoId ++;
+        ultimoId++;
         Reto reto = new Reto(ultimoId, nombre, descripcion, puntosMax, tiempo);
         datos.retos.add(reto);
+        datos.ultimoIdReto = ultimoId;
+        gestorDatos.guardarDatos(datos);
+        return reto;
+    }
+
+    public Reto crearReto(String nombre, String descripcion, int puntosMax) {
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+        ultimoId++;
+        Reto reto = new Reto(ultimoId, nombre, descripcion, puntosMax, 0);
         datos.ultimoIdReto = ultimoId;
         gestorDatos.guardarDatos(datos);
         return reto;
