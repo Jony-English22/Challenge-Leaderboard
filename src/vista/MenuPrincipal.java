@@ -98,6 +98,4 @@ public class MenuPrincipal {
         // 5. Esperar ENTER
         scanner.nextLine();
     }
-dk
-fdf23829asdasmnd,amn
 }
