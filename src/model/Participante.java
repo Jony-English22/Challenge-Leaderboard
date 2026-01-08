@@ -4,13 +4,23 @@ import java.util.Objects;
 
 public class Participante {
 
+    private String id;
     private String nombre;
+
+    public Participante(String id, String nombre) {
+        this.id     = id;
+        this.nombre = nombre;
+    }
 
     public Participante(String nombre) {
         this.nombre = nombre;
     }
 
     public Participante() {
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getNombre() {
@@ -36,6 +46,6 @@ public class Participante {
 
     @Override
     public String toString() {
-        return String.format("Participante{nombre='%s'}", nombre);
+        return String.format("Participante{id=%s, nombre='%s'}", id, nombre);
     }
 }

@@ -101,7 +101,18 @@ public class MenuPrincipal {
     }
 
     private void menuGestionarParticipantes() {
+        String titulo = "PARTICIPANTES";
+        String[] opciones = {
+                "[1] Registrar participante",
+                "[2] Listar participantes",
+                "[3] Actualizar participante",
+                "[4] Eliminar participante",
+                "[0] Volver al menú principal"
+        };
 
+        System.out.println(formatearMenu(titulo, opciones, 40));
+
+        System.out.print("Opción: ");
     }
 
     private void menuCrearReto() {

@@ -118,5 +118,17 @@ public class GestorRetos {
         return 0;
     }
 
+    public List<Reto> listaRetosCompletados() {
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+        List<Reto> completados = new ArrayList<>();
+
+        for (Reto reto : datos.retos) {
+            if (reto.getEstado() == EstadoReto.COMPLETADO) {
+                completados.add(reto);
+            }
+        }
+        return completados;
+    }
+
 
 }

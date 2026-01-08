@@ -22,16 +22,27 @@ public class GestorParticipantes {
         this.gestorRetos = gestorRetos;
     }
 
-    public boolean registrarParticipante(String nombre) {
-        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
-        for (Participante p: datos.participantes) {
-            if (p.getNombre().equals(nombre)) {
-                participantes.add(new Participante(nombre));
-                return false;
+    private String generarId(List<Participante> participantes) {
+        int max = 0;
+
+        for (Participante p : participantes) {
+            String numero = p.getId().substring(2);
+            int valor = Integer.parseInt(numero);
+            if (valor > max) {
+                max = valor;
             }
         }
+        return String.format("RK%03d", max + 1);
+    }
 
-        Participante nuevo = new Participante(nombre);
+    public boolean registrarParticipante(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return false;
+        }
+
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+        String id = generarId(datos.participantes);
+        Participante nuevo = new Participante(id, nombre);
         datos.participantes.add(nuevo);
         gestorDatos.guardarDatos(datos);
         return true;
@@ -39,16 +50,20 @@ public class GestorParticipantes {
     }
 
     public boolean eliminarParticipante(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return false;
+        }
+
         GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
         for (int i = 0; i < datos.participantes.size(); i++) {
             Participante p = datos.participantes.get(i);
             if (p.getNombre().equals(nombre)) {
                 datos.participantes.remove(i);
                 gestorDatos.guardarDatos(datos);
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public Participante obtenerParticipante(String nombre) {
@@ -77,13 +92,15 @@ public class GestorParticipantes {
 
         for (Reto reto : datos.retos) {
             for (Resultado resultado : reto.getResultados()) {
-                puntosTotales  += resultado.getPuntosObtenidos();
+                if (resultado.getNombreParticipante().equals(nombre)) {
+                    puntosTotales  += resultado.getPuntosObtenidos();
+                }
             }
         }
         return puntosTotales;
     }
 
-    public boolean existeParticipantes(String nombre) {
+    public boolean existeParticipante(String nombre) {
         GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
 
         for (Participante p: datos.participantes) {
@@ -107,10 +124,19 @@ public class GestorParticipantes {
 
     }
 
-    public void cargarParticipantes(List<Participante> participantes) {
+    public void cargarParticipantes() {
         GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
         this.participantes = new ArrayList<>(datos.participantes);
 
+    }
+
+    public boolean actualizarParticipantes(int id, String nombre) {
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+        List<Participante> list = datos.participantes;
+
+        for (Participante p: list) {
+
+        }
     }
 
 }

@@ -55,18 +55,22 @@ public class VistaConsola {
 
     }
 
-    public static void mostrarHistorial(List<Reto> reto) {
+    /**
+     * Muestra el historial de retos completados
+     * @param retos Lista de retos COMPLETADOS (ya filtrada)
+     */
+    public static void mostrarHistorial(List<Reto> retos) {
         limpiarPantalla();
 
         String titulo = formatearTitulo("RETOS COMPLETADOS", 40);
 
-        if (reto.isEmpty()) {
+        if (retos.isEmpty()) {
             System.out.println("No hay retos completados.");
             return;
         }
 
-        String[] encabezados = {"ID", "Nombre", "Participantes", "Estado"};
-        String[][] datos = construirMatrizRetoH(reto);
+        String[] encabezados = {"ID", "Nombre", "Participantes"};
+        String[][] datos = construirMatrizRetoH(retos);
         String tabla = formatearTablas(datos, encabezados);
         System.out.println(titulo + "\n" + tabla);
     }

@@ -444,13 +444,12 @@ public class Utils {
     }
 
     public static String[][] construirMatrizRetoH(List<Reto> retos) {
-        String[][] matriz = new String[retos.size()][4];
+        String[][] matriz = new String[retos.size()][3];
         for (int i = 0; i < retos.size(); i++) {
             Reto r = retos.get(i);
             matriz[i][0] = String.valueOf(r.getId());
             matriz[i][1] = r.getNombre();
             matriz[i][2] = String.valueOf(r.getResultados().size());
-            matriz[i][3] = String.valueOf(r.getEstado());
         }
         return matriz;
     }
