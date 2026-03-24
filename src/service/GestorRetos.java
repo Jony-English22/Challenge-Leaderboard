@@ -32,6 +32,7 @@ public class GestorRetos {
         GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
         ultimoId++;
         Reto reto = new Reto(ultimoId, nombre, descripcion, puntosMax, 0);
+        datos.retos.add(reto);
         datos.ultimoIdReto = ultimoId;
         gestorDatos.guardarDatos(datos);
         return reto;
@@ -49,13 +50,13 @@ public class GestorRetos {
 
     public List<Reto> listarRetosPendientes() {
         GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
-        List<Reto> completados = new ArrayList<>();
+        List<Reto> pendientes = new ArrayList<>();
         for (Reto r : datos.retos) {
-           if (r.getEstado() == EstadoReto.COMPLETADO) {
-               completados.add(r);
+           if (r.getEstado() == EstadoReto.PENDIENTE) {
+               pendientes.add(r);
            }
         }
-        return completados;
+        return pendientes;
     }
 
     public boolean iniciarReto(int id) {
@@ -73,21 +74,34 @@ public class GestorRetos {
     public boolean agregarParticipanteAlReto(int retoId, String nombreParticipante) {
         GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
 
-        for (Reto r: datos.retos) {
-            for (Resultado res : r.getResultados()) {
-                if (res.getNombreParticipante().equals(nombreParticipante)) {
-                    return false;
-                }
+        // Buscar el reto específico por ID
+        Reto retoTarget = null;
+        for (Reto r : datos.retos) {
+            if (r.getId() == retoId) {
+                retoTarget = r;
+                break;
             }
-
-            int posicion = r.getResultados().size() + 1;
-            int puntos = calcularPuntosDecrecientes(r.getPuntosMaximos(), posicion);
-            Resultado resultado = new Resultado(nombreParticipante, puntos, posicion);
-            r.agregarResultado(resultado);
-            gestorDatos.guardarDatos(datos);
-            return true;
         }
-        return false;
+
+        // Si no existe el reto, retornar false
+        if (retoTarget == null) {
+            return false;
+        }
+
+        // Verificar si el participante ya existe en ESTE reto
+        for (Resultado res : retoTarget.getResultados()) {
+            if (res.getNombreParticipante().equals(nombreParticipante)) {
+                return false; // Participante ya existe en este reto
+            }
+        }
+
+        // Agregar participante a este reto específico
+        int posicion = retoTarget.getResultados().size() + 1;
+        int puntos = calcularPuntosDecrecientes(retoTarget.getPuntosMaximos(), posicion);
+        Resultado resultado = new Resultado(nombreParticipante, puntos, posicion);
+        retoTarget.agregarResultado(resultado);
+        gestorDatos.guardarDatos(datos);
+        return true;
     }
 
     public void finalizarReto(int id) {
@@ -118,7 +132,7 @@ public class GestorRetos {
         return 0;
     }
 
-    public List<Reto> listaRetosCompletados() {
+    public List<Reto> listarRetosCompletados() {
         GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
         List<Reto> completados = new ArrayList<>();
 
@@ -130,5 +144,39 @@ public class GestorRetos {
         return completados;
     }
 
+    public List<Reto> listarRetos() {
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+        List<Reto> retos = nes ArrayList<>();
+
+        for (Reto reto : datos.retos) {
+            retos.add(reto);
+        }
+        return retos;
+    }
+
+    public boolean eliminarReto(int id) {
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+
+        for (Reto reto : datos.retos) {
+            if (reto.getId() == id) {
+                datos.retos.remove(id);
+                gestorDatos.guardarDatos(datos);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean eliminarParticipanteDelReto(int retoId, String nombreParticipante) {
+
+    }
+
+    public boolean actualizarReto(int id, String nombre, String descripcion, int puntosMax, int tiempo) {
+
+    }
+
+    public boolean actualizarReto(int id, String nombre, String descripcion, int puntosMax) {
+        
+    }
 
 }

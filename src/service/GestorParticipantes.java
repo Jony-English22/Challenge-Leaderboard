@@ -130,13 +130,21 @@ public class GestorParticipantes {
 
     }
 
-    public boolean actualizarParticipantes(int id, String nombre) {
-        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
-        List<Participante> list = datos.participantes;
-
-        for (Participante p: list) {
-
+    public boolean actualizarParticipante(String nombreActual, String nombreNuevo) {
+        if (nombreActual == null || nombreActual.trim().isEmpty() || 
+            nombreNuevo == null || nombreNuevo.trim().isEmpty()) {
+            return false;
         }
-    }
 
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+
+        for (Participante p : datos.participantes) {
+            if (p.getNombre().equals(nombreActual)) {
+                p.setNombre(nombreNuevo);
+                gestorDatos.guardarDatos(datos);
+                return true;
+            }
+        }
+        return false;
+    }
 }
