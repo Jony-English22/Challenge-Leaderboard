@@ -78,6 +78,16 @@ public class GestorParticipantes {
         return null;
     }
 
+    public Participante obtenerParticipantePorId(String id) {
+        GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
+        for (Participante p : datos.participantes) {
+            if (p.getId().equals(id)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public List<Participante> listarParticipantes() {
         GestorDatos.DatosApp datos = gestorDatos.cargarDatos();
         return datos.participantes;

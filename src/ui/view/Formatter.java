@@ -69,6 +69,18 @@ public class Formatter {
     }
 
     /**
+     * Formatea detalles de un participante
+     * 
+     * @param participante Participante a mostrar
+     * @return String con detalles formateados
+     */
+    public static String formatParticipanteDetails(Participante participante) {
+        // TODO: Implementar detalles del participante
+        // Incluir: ID, Nombre, Puntos totales
+        return "ID: " + participante.getId() + "\nNombre: " + participante.getNombre();
+    }
+
+    /**
      * Crea mensaje de éxito
      * 
      * @param mensaje Mensaje a mostrar

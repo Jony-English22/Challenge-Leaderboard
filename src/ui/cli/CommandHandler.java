@@ -1,8 +1,13 @@
 package ui.cli;
 
+import java.util.List;
+
+import model.Participante;
+import model.Reto;
 import service.GestorParticipantes;
 import service.GestorRetos;
 import ui.view.ConsoleView;
+import ui.view.Formatter;
 
 /**
  * CommandHandler - Interpreta y ejecuta comandos del usuario
@@ -139,8 +144,13 @@ public class CommandHandler {
     private boolean handleListar(String args) {
         // TODO: Implementar listado
         // Si args vacío, listar retos; si "participantes", listar participantes
-
-        consoleView.showInfo("Comando 'listar' - TODO: Implementar");
+        if (args == null || args.trim().isEmpty()) {
+            listarRetos();
+        } else if (args.trim().equalsIgnoreCase("participantes")) {
+            listarParticipantes();
+        } else {
+            consoleView.showError("Argumentos no reconocido. Uso: listar || listar [participantes]");            
+        }
         return true;
     }
 
@@ -151,18 +161,62 @@ public class CommandHandler {
     private boolean handleEliminar(String args) {
         // TODO: Implementar eliminación
         // Parsear ID, confirmar eliminación, ejecutar
-        consoleView.showInfo("Comando 'eliminar' - TODO: Implementar");
+        if (args == null || args.trim().isEmpty()) {
+            consoleView.showError("Argumento no reconocido. Uso: eliminar [id]");
+            return true;
+        }
+        String [] partes = args.trim().split("\\s+");
+
+        if (partes.length != 2) {
+            consoleView.showError("Uso: eliminar <reto|parcipantente> [id]");
+            return true;
+        }
+
+        String tipo = partes[0];
+        String idStr = partes[1];
+
+        try {
+            int id = Integer.parseInt(idStr);
+
+            if (tipo.equalsIgnoreCase("reto")) {
+                eliminarReto(id);
+            } else if (tipo.equalsIgnoreCase("participante")) {
+                eliminarParticipante(id);
+            } else {
+                consoleView.showError("Tipo no válido. Usa: reto | participante");
+            }
+        } catch ( NumberFormatException e) {
+            consoleView.showError("El ID debe ser un número");
+        }
         return true;
     }
 
     /**
      * Maneja comando 'ver'
-     * Sintaxis: ver <id>
+     * Sintaxis: ver <id> || ver participante <id>
      */
     private boolean handleVer(String args) {
-        // TODO: Implementar ver detalles
-        // Parsear ID, mostrar detalles del reto
-        consoleView.showInfo("Comando 'ver' - TODO: Implementar");
+        if (args == null || args.trim().isEmpty()) {
+            consoleView.showError("Argumento no reconocido. Uso: ver [id] || ver participante [id]");
+            return true;
+        }
+        
+        String[] partes = args.split("\\s+");
+        if (partes.length == 1) {
+            // Ver reto por ID (int)
+            try {
+                int id = Integer.parseInt(partes[0]);
+                mostrarDetallesReto(id);
+            } catch (NumberFormatException e) {
+                consoleView.showError("El ID del reto debe ser un número");
+            }
+        } else if (partes.length == 2 && "participante".equalsIgnoreCase(partes[0])) {
+            // Ver participante por ID (String)
+            String id = partes[1];
+            mostrarDetallesParticipante(id);
+        } else {
+            consoleView.showError("Uso: ver [id] || ver participante [id]");
+        }
         return true;
     }
 
@@ -173,7 +227,49 @@ public class CommandHandler {
     private boolean handleParticipante(String args) {
         // TODO: Implementar gestión de participantes
         // Subcomandos: agregar, eliminar, listar
-        consoleView.showInfo("Comando 'participante' - TODO: Implementar");
+        if (args == null || args.trim().isEmpty()) {
+            consoleView.showError("Argumento no reconocido. Uso: participante <agregar||eliminar||listar>");
+            return true;
+        }
+
+        String[] partes = args.split("\\s+");
+
+        switch (partes[0].toLowerCase()) {
+            case "agregar":
+                if (partes.length < 2) {
+                    consoleView.showError("Uso: participante agregar <nombre>");
+                } else {
+                    String nombre = partes[1];
+                    boolean creado = gestorParticipantes.registrarParticipante(nombre);
+                    if (creado) {
+                        consoleView.showInfo("Participante creado: " + nombre);
+                    } else {
+                        consoleView.showError("No se pudo crear participante. Nombre inválido o duplicado.");
+                    }
+                }
+                break;
+
+            case "eliminar":
+                if (partes.length < 2) {
+                    consoleView.showError("Uso: participante eliminar <indice>");
+                } else {
+                    try {
+                        int indice = Integer.parseInt(partes[1]);
+                        eliminarParticipante(indice);
+                    } catch (NumberFormatException e) {
+                        consoleView.showError("El índice debe ser un número entero");
+                    }
+                }
+                break;
+
+            case "listar":
+                listarParticipantes();
+                break;
+
+            default:
+                consoleView.showError("Argumento no reconocido. Uso: participante <agregar||eliminar||listar>");
+                break;
+        }
         return true;
     }
 
@@ -212,5 +308,123 @@ public class CommandHandler {
      */
     public boolean isRunning() {
         return running;
+    }
+
+    /**
+     * Listar Retos
+     */
+    private void listarRetos() {
+        List<Reto> retos = gestorRetos.listarRetos();
+        
+        if (retos.isEmpty()) {
+            consoleView.showInfo("No hay retos registrados");
+            return;
+        }
+
+        consoleView.showInfo(Formatter.formatRetosList(retos));
+    }
+
+    /**
+     * Listar Participates
+     */
+    private void listarParticipantes() {
+        List <Participante> participantes = gestorParticipantes.listarParticipantes();
+
+        if (participantes.isEmpty()) {
+            consoleView.showInfo("No hay participantes registrados");
+            return;
+        }
+
+        consoleView.showInfo(Formatter.formatParticipantesList(participantes));
+    }
+    /**
+     * Listar Ranking
+     */
+    private void listarRanking() {
+
+    }
+
+    /**
+     * Eliminar Reto
+     */
+    private void eliminarReto(int id) {
+        Reto reto = gestorRetos.obtenerReto(id);
+        
+        if (reto == null) {
+            consoleView.showError("No existe ningún reto con ID: " + id);
+            return;
+        }
+
+        consoleView.showInfo("Reto encontrado: " + reto.getNombre());
+        String confirmacion = inputReader.readLine("¿Deseas eliminar este reto? (s/n): ");
+        
+        if (confirmacion.equalsIgnoreCase("s")) {
+            boolean eliminado = gestorRetos.eliminarReto(id);
+            if (eliminado) {
+                consoleView.showInfo("Reto eliminado correctamente");
+            } else {
+                consoleView.showError("Error al eliminar el reto");
+            }
+        } else {
+            consoleView.showInfo("Operación cancelada");
+        }
+    }
+
+    /**
+     * Eliminar Participantes
+     */
+    private void eliminarParticipante(int index) {
+        List<Participante> participantes = gestorParticipantes.listarParticipantes();
+        
+        if (index < 0 || index >= participantes.size()) {
+            consoleView.showError("Índice de participante inválido");
+            return;
+        }
+
+        Participante participante = participantes.get(index);
+        consoleView.showInfo("Participante encontrado: " + participante.getNombre());
+        String confirmacion = inputReader.readLine("¿Deseas eliminar este participante? (s/n): ");
+        
+        if (confirmacion.equalsIgnoreCase("s")) {
+            boolean eliminado = gestorParticipantes.eliminarParticipante(participante.getNombre());
+            if (eliminado) {
+                consoleView.showInfo("Participante eliminado correctamente");
+            } else {
+                consoleView.showError("Error al eliminar el participante");
+            }
+        } else {
+            consoleView.showInfo("Operación cancelada");
+        }
+    }
+
+    /**
+     * Mostrar detalles de un reto
+     */
+    private void mostrarDetallesReto(int id) {
+        Reto reto = gestorRetos.obtenerReto(id);
+        if (reto == null) {
+            consoleView.showError("No existe reto con ID: " + id);
+        } else {
+            consoleView.showInfo(Formatter.formatRetoDetails(reto));
+        }
+    }
+
+    /**
+     * Mostrar detalles de un participante
+     */
+    private void mostrarDetallesParticipante(String id) {
+        Participante participante = gestorParticipantes.obtenerParticipantePorId(id);
+        if (participante == null) {
+            consoleView.showError("No existe participante con ID: " + id);
+        } else {
+            consoleView.showInfo(Formatter.formatParticipanteDetails(participante));
+        }
+    }
+
+    /**
+     * Mostrar ranking
+     */
+    private void mostrarRanking() {
+        
     }
 }

@@ -25,7 +25,7 @@ public class RankingShell {
     public RankingShell(GestorRetos gestorRetos, GestorParticipantes gestorParticipantes) {
         this.inputReader = new InputReader();
         this.consoleView = new ConsoleView();
-        this.commandHandler = new CommandHandler(gestorRetos, gestorParticipantes, consoleView, inputReader);
+        this.commandHandler = new CommandHandler(gestorRetos, gestorParticipantes, consoleView, inputReader, new Formatter());
     }
 
     /**

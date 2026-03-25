@@ -1,0 +1,50 @@
+REVISIÓN DE FUNCIONALIDADES DE ELIMINACIÓN Y REGISTRO DE PARTICIPANTES
+═══════════════════════════════════════════════════════════════════════
+
+1. ESTADO ACTUAL DE FUNCIONALIDADES
+───────────────────────────────────
+
+✅ IMPLEMENTADO EN SERVICIOS:
+  - eliminarParticipanteDelReto(int retoId, String nombreParticipante) 
+    Ubicación: GestorRetos.java (línea 171)
+    Función: Elimina un participante de un reto específico
+    
+  - registrarParticipante(String nombre)
+    Ubicación: GestorParticipantes.java (línea 39)
+    Función: Registra/crea un nuevo participante en el sistema
+
+  - eliminarParticipante(String nombre)
+    Ubicación: GestorParticipantes.java
+    Función: Elimina completamente un participante del sistema
+
+❌ NO IMPLEMENTADO EN INTERFAZ CLI:
+  - handleParticipante(String args)
+    Ubicación: CommandHandler.java (línea 211)
+    Estado: Marcado como TODO
+    Descripción: Se necesita implementar con subcomandos: agregar, eliminar, listar
+
+
+2. DOS FORMAS DE ELIMINAR PARTICIPANTES
+────────────────────────────────────────
+
+Opción A: Eliminar participante de un reto específico
+  - Método: gestorRetos.eliminarParticipanteDelReto(int retoId, String nombreParticipante)
+  - Efecto: El participante se mantiene en el sistema pero se elimina del reto
+  - Ya está implementado en servicios
+
+Opción B: Eliminar participante completamente del sistema
+  - Método: gestorParticipantes.eliminarParticipante(String nombre)
+  - Efecto: El participante se elimina de toda la aplicación
+  - Ya está implementado en servicios
+
+
+3. ACTUALIZACIÓN PENDIENTE
+──────────────────────────
+
+Se requiere completar la implementación del comando "participante" en la CLI:
+  - Comando: "participante agregar <nombre>" - registrar nuevo participante
+  - Comando: "participante eliminar <id>" - eliminar participante del reto
+  - Comando: "participante listar" - listar todos los participantes
+
+Los servicios backend ya existen y funcionan correctamente, solo falta 
+la interfaz de usuario en CommandHandler.
