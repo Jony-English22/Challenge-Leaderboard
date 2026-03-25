@@ -31,3 +31,11 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+.target
+.zip
+.apache-maven-3.9.14
+
+# Maven
+target/
+apache-maven-3.9.14/
+maven.zip
