@@ -30,6 +30,9 @@ public class InputReader {
         // Leer línea completa, hacer trim y lowercase si es necesario
         // Manejar EOF o interrupciones
         System.out.print("> ");
+        if (!scanner.hasNextLine()) {
+            return "salir";
+        }
         return scanner.nextLine().trim();
     }
 
@@ -72,6 +75,8 @@ public class InputReader {
         // TODO: Implementar confirmación
         // Leer respuesta y verificar si es "s", "si", "y", "yes"
         String response = readLine(prompt + " (s/n): ").toLowerCase();
+        if (response.isEmpty())
+            return false;
         return response.equals("s") || response.equals("si") ||
                 response.equals("y") || response.equals("yes");
     }

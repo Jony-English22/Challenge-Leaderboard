@@ -1,6 +1,7 @@
 package ui.cli;
 
 import java.util.List;
+import java.util.Map;
 
 import model.Participante;
 import model.Reto;
@@ -149,7 +150,7 @@ public class CommandHandler {
         } else if (args.trim().equalsIgnoreCase("participantes")) {
             listarParticipantes();
         } else {
-            consoleView.showError("Argumentos no reconocido. Uso: listar || listar [participantes]");            
+            consoleView.showError("Argumentos no reconocido. Uso: listar || listar [participantes]");
         }
         return true;
     }
@@ -165,7 +166,7 @@ public class CommandHandler {
             consoleView.showError("Argumento no reconocido. Uso: eliminar [id]");
             return true;
         }
-        String [] partes = args.trim().split("\\s+");
+        String[] partes = args.trim().split("\\s+");
 
         if (partes.length != 2) {
             consoleView.showError("Uso: eliminar <reto|parcipantente> [id]");
@@ -185,7 +186,7 @@ public class CommandHandler {
             } else {
                 consoleView.showError("Tipo no válido. Usa: reto | participante");
             }
-        } catch ( NumberFormatException e) {
+        } catch (NumberFormatException e) {
             consoleView.showError("El ID debe ser un número");
         }
         return true;
@@ -200,7 +201,7 @@ public class CommandHandler {
             consoleView.showError("Argumento no reconocido. Uso: ver [id] || ver participante [id]");
             return true;
         }
-        
+
         String[] partes = args.split("\\s+");
         if (partes.length == 1) {
             // Ver reto por ID (int)
@@ -280,7 +281,8 @@ public class CommandHandler {
     private boolean handleRanking() {
         // TODO: Implementar mostrar ranking
         // Obtener ranking y mostrarlo
-        consoleView.showInfo("Comando 'ranking' - TODO: Implementar");
+        List<Map.Entry<Participante, Integer>> ranking = gestorParticipantes.obtenerRankingOrdenado();
+        consoleView.showInfo(Formatter.formatRanking(ranking));
         return true;
     }
 
@@ -290,7 +292,7 @@ public class CommandHandler {
     private boolean handleAyuda() {
         // TODO: Implementar ayuda
         // Mostrar lista de comandos disponibles
-        consoleView.showInfo("Comando 'ayuda' - TODO: Implementar");
+        consoleView.showHeader("Comandos del Sistema....");
         return true;
     }
 
@@ -298,9 +300,15 @@ public class CommandHandler {
      * Maneja comando 'salir'
      */
     private boolean handleSalir() {
-        running = false;
-        consoleView.showInfo("¡Hasta luego!");
-        return false;
+        String confirm = inputReader.readLine("¿Estás seguro de que quieres salir? (s/n): ");
+        if (confirm.equalsIgnoreCase("s")) {
+            running = false;
+            consoleView.showInfo("¡Hasta luego!");
+            return false;
+        } else {
+            consoleView.showInfo("Operación cancelada.");
+            return true;
+        }
     }
 
     /**
@@ -315,7 +323,7 @@ public class CommandHandler {
      */
     private void listarRetos() {
         List<Reto> retos = gestorRetos.listarRetos();
-        
+
         if (retos.isEmpty()) {
             consoleView.showInfo("No hay retos registrados");
             return;
@@ -328,7 +336,7 @@ public class CommandHandler {
      * Listar Participates
      */
     private void listarParticipantes() {
-        List <Participante> participantes = gestorParticipantes.listarParticipantes();
+        List<Participante> participantes = gestorParticipantes.listarParticipantes();
 
         if (participantes.isEmpty()) {
             consoleView.showInfo("No hay participantes registrados");
@@ -337,19 +345,13 @@ public class CommandHandler {
 
         consoleView.showInfo(Formatter.formatParticipantesList(participantes));
     }
-    /**
-     * Listar Ranking
-     */
-    private void listarRanking() {
-
-    }
 
     /**
      * Eliminar Reto
      */
     private void eliminarReto(int id) {
         Reto reto = gestorRetos.obtenerReto(id);
-        
+
         if (reto == null) {
             consoleView.showError("No existe ningún reto con ID: " + id);
             return;
@@ -357,7 +359,7 @@ public class CommandHandler {
 
         consoleView.showInfo("Reto encontrado: " + reto.getNombre());
         String confirmacion = inputReader.readLine("¿Deseas eliminar este reto? (s/n): ");
-        
+
         if (confirmacion.equalsIgnoreCase("s")) {
             boolean eliminado = gestorRetos.eliminarReto(id);
             if (eliminado) {
@@ -375,7 +377,7 @@ public class CommandHandler {
      */
     private void eliminarParticipante(int index) {
         List<Participante> participantes = gestorParticipantes.listarParticipantes();
-        
+
         if (index < 0 || index >= participantes.size()) {
             consoleView.showError("Índice de participante inválido");
             return;
@@ -384,7 +386,7 @@ public class CommandHandler {
         Participante participante = participantes.get(index);
         consoleView.showInfo("Participante encontrado: " + participante.getNombre());
         String confirmacion = inputReader.readLine("¿Deseas eliminar este participante? (s/n): ");
-        
+
         if (confirmacion.equalsIgnoreCase("s")) {
             boolean eliminado = gestorParticipantes.eliminarParticipante(participante.getNombre());
             if (eliminado) {
@@ -419,12 +421,5 @@ public class CommandHandler {
         } else {
             consoleView.showInfo(Formatter.formatParticipanteDetails(participante));
         }
-    }
-
-    /**
-     * Mostrar ranking
-     */
-    private void mostrarRanking() {
-        
     }
 }

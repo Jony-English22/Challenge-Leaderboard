@@ -51,9 +51,18 @@ public class Formatter {
      * @return String con tabla de ranking
      */
     public static String formatRanking(List<Map.Entry<Participante, Integer>> ranking) {
-        // TODO: Implementar formateo de ranking
-        // Posición, Nombre, Puntos totales
-        return "TODO: Implementar formatRanking";
+        if (ranking.isEmpty()) {
+            return "No hay participantes para mostrar en el ranking.";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== RANKING DE PARTICIPANTES ===\n");
+        sb.append(String.format("%-5s %-20s %-10s\n", "Pos", "Nombre", "Puntos"));
+        sb.append("-------------------------------------\n");
+        int pos = 1;
+        for (Map.Entry<Participante, Integer> entry : ranking) {
+            sb.append(String.format("%-5d %-20s %-10d\n", pos++, entry.getKey().getNombre(), entry.getValue()));
+        }
+        return sb.toString();
     }
 
     /**
