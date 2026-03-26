@@ -5,6 +5,7 @@ import service.GestorRetos;
 import ui.cli.CommandHandler;
 import ui.cli.InputReader;
 import ui.view.ConsoleView;
+import ui.view.Formatter;
 
 /**
  * RankingShell - Interfaz de línea de comandos tipo shell
@@ -21,11 +22,13 @@ public class RankingShell {
     private final InputReader inputReader;
     private final CommandHandler commandHandler;
     private final ConsoleView consoleView;
+    private final Formatter formatter;
 
     public RankingShell(GestorRetos gestorRetos, GestorParticipantes gestorParticipantes) {
         this.inputReader = new InputReader();
         this.consoleView = new ConsoleView();
-        this.commandHandler = new CommandHandler(gestorRetos, gestorParticipantes, consoleView, inputReader, new Formatter());
+        this.formatter = new Formatter();
+        this.commandHandler = new CommandHandler(gestorRetos, gestorParticipantes, consoleView, inputReader, formatter);
     }
 
     /**
@@ -38,6 +41,8 @@ public class RankingShell {
         // Hasta que commandHandler indique salir
 
         consoleView.showWelcome();
+        // Esperar a que el usuario presione Enter para continuar (sin mostrar prompt)
+        inputReader.readCommand();
 
         while (commandHandler.isRunning()) {
             try {

@@ -19,6 +19,10 @@ import model.Reto;
  */
 public class ConsoleView {
     private final Formatter formatter;
+    private static final String ORANGE = "\u001B[38;2;255;165;0m";
+    private static final String RESET = "\u001B[0m";
+    private static final String BORDER_COLOR = "\u001B[38;2;201;103;82m"; // El tono bronce/cobre
+    private static final String TEXT_COLOR = "\u001B[1;97m";
 
     public ConsoleView() {
         this.formatter = new Formatter();
@@ -56,36 +60,35 @@ public class ConsoleView {
      * Muestra lista de retos
      */
     public void showRetosList(List<Reto> retos) {
-        // TODO: Implementar mostrar lista de retos
-        // Usar formatter.formatRetosList()
-        System.out.println("TODO: Mostrar lista de retos");
+        System.out.println(formatter.formatRetosList(retos));
     }
 
     /**
      * Muestra detalles de un reto específico
      */
     public void showRetoDetails(Reto reto) {
-        // TODO: Implementar mostrar detalles de reto
-        // Usar formatter.formatRetoDetails()
-        System.out.println("TODO: Mostrar detalles de reto");
+        System.out.println(formatter.formatRetoDetails(reto));
     }
 
     /**
      * Muestra ranking de participantes
      */
     public void showRanking(List<Map.Entry<Participante, Integer>> ranking) {
-        // TODO: Implementar mostrar ranking
-        // Usar formatter.formatRanking()
-        System.out.println("TODO: Mostrar ranking");
+        System.out.println(formatter.formatRanking(ranking));
+    }
+
+    /**
+     * Muestra detalles de un participante específico
+     */
+    public void showParticipanteDetails(Participante participante) {
+        System.out.println(formatter.formatParticipanteDetails(participante));
     }
 
     /**
      * Muestra lista de participantes
      */
     public void showParticipantesList(List<Participante> participantes) {
-        // TODO: Implementar mostrar lista de participantes
-        // Usar formatter.formatParticipantesList()
-        System.out.println("TODO: Mostrar lista de participantes");
+        System.out.println(formatter.formatParticipantesList(participantes));
     }
 
     /**
@@ -106,7 +109,7 @@ public class ConsoleView {
      * Muestra el prompt para comandos
      */
     public void showPrompt() {
-        System.out.print(formatter.prompt("ranking"));
+        System.out.print("\u001B[32muser@english22/: \u001B[0m");
     }
 
     /**
@@ -114,9 +117,22 @@ public class ConsoleView {
      */
     public void showWelcome() {
         clearScreen();
-        showHeader("Sistema de Ranking - Retos");
-        showInfo("Escribe 'ayuda' para ver comandos disponibles");
-        showInfo("Escribe 'salir' para terminar");
+        printBoxedMessage("Welcome to the Challenge Code!!!");
+        System.out.println(ORANGE);
+        System.out.println(
+                " ██████╗██╗  ██╗ █████╗ ██╗     ██╗     ███████╗███╗   ██╗ ██████╗ ███████╗     ██████╗ ██████╗ ██████╗ ███████╗");
+        System.out.println(
+                "██╔════╝██║  ██║██╔══██╗██║     ██║     ██╔════╝████╗  ██║██╔════╝ ██╔════╝    ██╔════╝██╔═══██╗██╔══██╗██╔════╝");
+        System.out.println(
+                "██║     ███████║███████║██║     ██║     █████╗  ██╔██╗ ██║██║  ███╗█████╗      ██║     ██║   ██║██║  ██║█████╗  ");
+        System.out.println(
+                "██║     ██╔══██║██╔══██║██║     ██║     ██╔══╝  ██║╚██╗██║██║   ██║██╔══╝      ██║     ██║   ██║██║  ██║██╔══╝  ");
+        System.out.println(
+                "╚██████╗██║  ██║██║  ██║███████╗███████╗███████╗██║ ╚████║╚██████╔╝███████╗    ╚██████╗╚██████╔╝██████╔╝███████╗");
+        System.out.println(
+                " ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝     ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝");
+        System.out.println(RESET);
+        System.out.println("\033[34mLogin successful. Press Enter to continue\033[0m");
         System.out.println();
     }
 
@@ -128,11 +144,27 @@ public class ConsoleView {
         System.out.println("crear \"nombre\" [descripcion] [puntos] [tiempo]  - Crear nuevo reto");
         System.out.println("listar [retos|participantes]                  - Listar elementos");
         System.out.println("ver <id>                                       - Ver detalles de reto");
+        System.out.println("iniciar <id>                                   - Iniciar un reto pendiente");
         System.out.println("eliminar <id>                                  - Eliminar reto");
         System.out.println("participante <subcomando>                      - Gestionar participantes");
         System.out.println("ranking                                        - Ver ranking general");
         System.out.println("ayuda                                          - Mostrar esta ayuda");
         System.out.println("salir                                          - Salir del programa");
         System.out.println();
+    }
+
+    public void printBoxedMessage(String message) {
+        int padding = 4;
+        int innerWidth = message.length() + (padding * 2);
+
+        // Borde superior
+        System.out.println(BORDER_COLOR + "╭" + "─".repeat(innerWidth) + "╮" + RESET);
+
+        // Contenido
+        System.out.println(BORDER_COLOR + "│" + " ".repeat(padding) + TEXT_COLOR + message + " ".repeat(padding) +
+                BORDER_COLOR + "│" + RESET);
+
+        // Borde inferior
+        System.out.println(BORDER_COLOR + "╰" + "─".repeat(innerWidth) + "╯" + RESET);
     }
 }

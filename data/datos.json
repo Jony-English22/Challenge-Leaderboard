@@ -1,1 +1,1 @@
-{"participantes":[],"retos":[],"ultimoIdReto":0}
+{"participantes":[{"id":"RK001","nombre":"Juan"}],"retos":[{"id":1,"nombre":"Buzz","descripcion":"Crea un programa que sume","puntosMaximos":100,"tiempoMinutos":1,"estado":"EN_CURSO","resultados":[]}],"ultimoIdReto":1}

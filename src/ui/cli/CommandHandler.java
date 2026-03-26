@@ -26,14 +26,16 @@ public class CommandHandler {
     private final GestorParticipantes gestorParticipantes;
     private final ConsoleView consoleView;
     private final InputReader inputReader;
+    private final Formatter formatter;
     private boolean running;
 
     public CommandHandler(GestorRetos gestorRetos, GestorParticipantes gestorParticipantes, ConsoleView consoleView,
-            InputReader inputReader) {
+            InputReader inputReader, Formatter formatter) {
         this.gestorRetos = gestorRetos;
         this.gestorParticipantes = gestorParticipantes;
         this.consoleView = consoleView;
         this.inputReader = inputReader;
+        this.formatter = formatter;
         this.running = true;
     }
 
@@ -66,6 +68,8 @@ public class CommandHandler {
                 return handleEliminar(args);
             case "ver":
                 return handleVer(args);
+            case "iniciar":
+                return handleIniciar(args);
             case "participante":
                 return handleParticipante(args);
             case "ranking":
@@ -193,9 +197,29 @@ public class CommandHandler {
     }
 
     /**
-     * Maneja comando 'ver'
-     * Sintaxis: ver <id> || ver participante <id>
+     * Maneja comando 'iniciar'
+     * Sintaxis: iniciar <id>
      */
+    private boolean handleIniciar(String args) {
+        if (args == null || args.trim().isEmpty()) {
+            consoleView.showError("Uso: iniciar <id>");
+            return true;
+        }
+
+        try {
+            int id = Integer.parseInt(args.trim());
+            boolean iniciado = gestorRetos.iniciarReto(id);
+            if (iniciado) {
+                consoleView.showSuccess("Reto iniciado correctamente");
+            } else {
+                consoleView.showError("No se pudo iniciar el reto. Verifique que existe y está pendiente");
+            }
+        } catch (NumberFormatException e) {
+            consoleView.showError("El ID debe ser un número");
+        }
+        return true;
+    }
+
     private boolean handleVer(String args) {
         if (args == null || args.trim().isEmpty()) {
             consoleView.showError("Argumento no reconocido. Uso: ver [id] || ver participante [id]");
@@ -279,10 +303,8 @@ public class CommandHandler {
      * Sintaxis: ranking
      */
     private boolean handleRanking() {
-        // TODO: Implementar mostrar ranking
-        // Obtener ranking y mostrarlo
         List<Map.Entry<Participante, Integer>> ranking = gestorParticipantes.obtenerRankingOrdenado();
-        consoleView.showInfo(Formatter.formatRanking(ranking));
+        consoleView.showRanking(ranking);
         return true;
     }
 
@@ -292,7 +314,7 @@ public class CommandHandler {
     private boolean handleAyuda() {
         // TODO: Implementar ayuda
         // Mostrar lista de comandos disponibles
-        consoleView.showHeader("Comandos del Sistema....");
+        consoleView.showHelp();
         return true;
     }
 
@@ -329,7 +351,7 @@ public class CommandHandler {
             return;
         }
 
-        consoleView.showInfo(Formatter.formatRetosList(retos));
+        consoleView.showRetosList(retos);
     }
 
     /**
@@ -343,7 +365,7 @@ public class CommandHandler {
             return;
         }
 
-        consoleView.showInfo(Formatter.formatParticipantesList(participantes));
+        consoleView.showParticipantesList(participantes);
     }
 
     /**
@@ -407,7 +429,7 @@ public class CommandHandler {
         if (reto == null) {
             consoleView.showError("No existe reto con ID: " + id);
         } else {
-            consoleView.showInfo(Formatter.formatRetoDetails(reto));
+            consoleView.showRetoDetails(reto);
         }
     }
 
@@ -419,7 +441,7 @@ public class CommandHandler {
         if (participante == null) {
             consoleView.showError("No existe participante con ID: " + id);
         } else {
-            consoleView.showInfo(Formatter.formatParticipanteDetails(participante));
+            consoleView.showParticipanteDetails(participante);
         }
     }
 }

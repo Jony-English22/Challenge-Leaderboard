@@ -1,323 +1,176 @@
-# Ranking-Retos
+# Challenge Leaderboard
 
-Sistema de gestión de retos con ranking por consola (estilo CLI shell).
+Un sistema de gestión de retos y competiciones desarrollado en Java que permite crear, gestionar y rankear participantes en desafíos programáticos a través de una interfaz de línea de comandos (CLI) intuitiva.
 
-## 🚀 Uso
+## 📋 Descripción General
 
-Compila y ejecuta:
+Challenge Leaderboard es una aplicación de consola diseñada para organizar y administrar retos de programación o desafíos competitivos. El sistema permite registrar participantes, crear retos con puntuaciones y tiempos límite, gestionar resultados y visualizar rankings en tiempo real. Los datos se persisten automáticamente en formato JSON para mantener la consistencia entre sesiones.
 
+## 🎯 Objetivo
+
+Facilitar la organización de competiciones de programación y retos técnicos, proporcionando una herramienta simple pero efectiva para:
+- Gestionar participantes y retos
+- Realizar seguimiento de puntuaciones
+- Mantener rankings actualizados
+- Almacenar datos de manera persistente
+
+## ✨ Funcionalidades Principales
+
+### Gestión de Retos
+- **Crear retos**: Define desafíos con nombre, descripción, puntuación máxima y tiempo límite
+- **Listar retos**: Visualiza todos los retos disponibles con su estado actual
+- **Ver detalles**: Consulta información completa de un reto específico
+- **Eliminar retos**: Remueve retos del sistema cuando sea necesario
+
+### Gestión de Participantes
+- **Registrar participantes**: Agrega nuevos competidores al sistema
+- **Listar participantes**: Muestra todos los participantes registrados
+- **Ver perfil**: Consulta detalles de un participante específico
+- **Eliminar participantes**: Remueve participantes del sistema
+
+### Sistema de Ranking
+- **Ranking general**: Visualiza la clasificación de participantes por puntuación total
+- **Puntuación acumulada**: Los puntos se calculan basándose en los resultados de los retos
+
+### Interfaz de Usuario
+- **CLI interactiva**: Interfaz de comandos estilo shell con prompts claros
+- **Ayuda integrada**: Sistema de ayuda para recordar comandos disponibles
+- **Mensajes informativos**: Retroalimentación clara sobre operaciones realizadas
+
+## 🛠 Tecnologías Utilizadas
+
+- **Lenguaje**: Java 17
+- **Gestión de dependencias**: Maven 3.9+
+- **Persistencia de datos**: JSON (Gson library)
+- **Arquitectura**: Modelo-Vista-Controlador (MVC) adaptado para consola
+
+## 📁 Estructura del Proyecto
+
+```
+Challenge-Leaderboard/
+├── src/
+│   ├── Main.java                 # Punto de entrada de la aplicación
+│   ├── model/                    # Modelos de datos
+│   │   ├── EstadoReto.java       # Estados posibles de un reto
+│   │   ├── Participante.java     # Modelo de participante
+│   │   ├── Resultado.java        # Modelo de resultado
+│   │   └── Reto.java             # Modelo de reto
+│   ├── service/                  # Lógica de negocio
+│   │   ├── GestorDatos.java      # Gestión de persistencia JSON
+│   │   ├── GestorParticipantes.java # Lógica de participantes
+│   │   ├── GestorRetos.java      # Lógica de retos
+│   │   └── TimeReto.java         # Temporizador para retos
+│   └── ui/                       # Interfaz de usuario
+│       ├── cli/
+│       │   ├── CommandHandler.java # Procesamiento de comandos
+│       │   └── InputReader.java   # Lectura de entrada usuario
+│       ├── menu/
+│       │   └── RankingShell.java  # Shell principal
+│       └── view/
+│           ├── ConsoleView.java   # Vista de consola
+│           └── Formatter.java     # Formateo de salida
+├── data/
+│   └── datos.json                # Archivo de datos persistentes
+├── target/                       # Archivos compilados (generado)
+├── pom.xml                       # Configuración Maven
+└── README.md                     # Este archivo
+```
+
+## 🚀 Instalación y Ejecución
+
+### Prerrequisitos
+- Java 17 o superior instalado
+- Maven 3.6+ instalado
+
+### Instalación
+1. Clona el repositorio:
+   ```bash
+   git clone <url-del-repositorio>
+   cd Challenge-Leaderboard
+   ```
+
+2. Compila el proyecto:
+   ```bash
+   mvn clean compile
+   ```
+
+### Ejecución
+Ejecuta la aplicación con Maven:
 ```bash
-mvn clean compile exec:java
+mvn exec:java
 ```
 
-## 💻 Comandos Disponibles
-
+O compila y ejecuta manualmente:
+```bash
+mvn clean package
+java -cp target/classes Main
 ```
-ranking> crear "Reto de Programación" "Resolver algoritmo" 100 30
-✅ Reto creado exitosamente
+
+## 💡 Ejemplos de Uso
+
+### Sesión de ejemplo:
+```
+Bienvenido al Sistema de Ranking de Retos
+
+ranking> crear "Algoritmo de Ordenamiento" "Implementar quicksort" 50 45
+✅ Reto creado: Algoritmo de Ordenamiento
+
+ranking> participante agregar "Ana García"
+✅ Participante creado: Ana García
+
+ranking> participante agregar "Carlos López"
+✅ Participante creado: Carlos López
 
 ranking> listar
 === RETOS DISPONIBLES ===
-ID  Nombre               Puntos  Tiempo
-1   Reto de Programación  100     30 min
+ID  Nombre                    Puntos  Tiempo  Estado
+1   Algoritmo de Ordenamiento   50      45     PENDIENTE
 
-ranking> ver 1
-=== DETALLES DEL RETO ===
-ID: 1
-Nombre: Reto de Programación
-Descripción: Resolver algoritmo
-Puntos: 100
-Tiempo: 30 minutos
-Estado: PENDIENTE
-Participantes: 0
-
-ranking> participante agregar "Juan Pérez"
-✅ Participante registrado
+ranking> listar participantes
+=== PARTICIPANTES REGISTRADOS ===
+ID    Nombre
+RK001 Ana García
+RK002 Carlos López
 
 ranking> ranking
 === RANKING GENERAL ===
 Posición  Participante  Puntos
-1         Juan Pérez     0
+1         Ana García     0
+2         Carlos López   0
 
 ranking> ayuda
 === COMANDOS DISPONIBLES ===
-crear "nombre" [desc] [puntos] [tiempo]  - Crear reto
-listar [retos|participantes]             - Listar elementos
-ver <id>                                 - Ver detalles
-eliminar <id>                            - Eliminar reto
-participante <subcomando>                - Gestionar participantes
-ranking                                  - Ver ranking
-ayuda                                    - Mostrar ayuda
-salir                                    - Salir
+crear <nombre> <puntos> <tiempo>     - Crear nuevo reto
+listar [retos|participantes]         - Listar elementos
+ver <id>                             - Ver detalles de reto
+ver participante <id>                - Ver detalles de participante
+eliminar reto <id>                   - Eliminar reto
+eliminar participante <id>           - Eliminar participante
+participante agregar <nombre>        - Registrar participante
+ranking                              - Mostrar ranking general
+ayuda                                - Mostrar esta ayuda
+salir                                - Salir de la aplicación
 
 ranking> salir
-ℹ️ ¡Hasta luego!
+Sesión terminada
 ```
 
-## 🏗️ Arquitectura
+## 🔮 Mejoras Futuras
 
-```
-ui/
-├── cli/           # Entrada y procesamiento
-│   ├── InputReader.java     # Lectura de entrada
-│   └── CommandHandler.java  # Interpretación de comandos
-├── view/          # Salida y formateo
-│   ├── ConsoleView.java     # Coordinación de vista
-│   └── Formatter.java       # Formateo de texto
-└── menu/          # Coordinación general
-    └── RankingShell.java    # Shell principal
-```
+### Integración con GitHub
+**Propósito**: Sincronizar datos de retos y rankings con repositorios de GitHub para compartir resultados públicamente y facilitar colaboraciones.
 
-## 📦 Dependencias
+**Valor**:
+- **Transparencia**: Los rankings y resultados serían visibles públicamente
+- **Colaboración**: Participantes podrían contribuir con nuevos retos vía pull requests
+- **Historial**: Git proporcionaría un registro inmutable de cambios en rankings
+- **Integración CI/CD**: Automatizar actualizaciones de rankings tras completar retos
 
-- Gson 2.10.1 (para persistencia JSON)
-
-## 🔧 Desarrollo
-
-La UI está diseñada para ser extensible. Cada componente tiene responsabilidades claras:
-
-- **InputReader**: Solo lee entrada
-- **CommandHandler**: Solo procesa comandos
-- **ConsoleView**: Solo muestra salida
-- **Formatter**: Solo formatea texto
-
-Los métodos marcados con `TODO` necesitan implementación de la lógica específica.
-```
+**Implementación propuesta**:
+- API de GitHub para crear issues/PRs con resultados
+- Webhooks para actualizar rankings automáticamente
+- GitHub Actions para validar y procesar submissions
+- README dinámico que muestre rankings actualizados
 
 ---
-
-# 🎯 ESTRUCTURA COMPLETA DEL PROYECTO
-```
-RankingRetos/
-├── src/
-│   ├── Main.java
-│   ├── modelo/
-│   │   ├── Participante.java
-│   │   ├── Reto.java
-│   │   ├── Resultado.java
-│   │   └── EstadoReto.java (enum)
-│   ├── servicio/
-│   │   ├── GestorDatos.java
-│   │   ├── GestorParticipantes.java
-│   │   ├── GestorRetos.java
-│   │   └── TimerReto.java
-│   ├── vista/
-│   │   ├── VistaConsola.java
-│   │   └── MenuPrincipal.java
-│   └── util/
-│       └── Utilidades.java
-└── datos/
-    └── datos.json (se crea automáticamente)
-```
-
----
-
-# 📋 ORDEN DE IMPLEMENTACIÓN (COPY-PASTE READY)
-
-## 🔢 Orden de Codificación
-```
-1. EstadoReto.java (enum) ← EMPEZAR AQUÍ
-2. Resultado.java
-3. Participante.java
-4. Reto.java
-5. Utilidades.java
-6. GestorDatos.java
-7. GestorParticipantes.java
-8. GestorRetos.java
-9. VistaConsola.java
-10. TimerReto.java
-11. MenuPrincipal.java
-12. Main.java ← TERMINAR AQUÍ
-```
-
----
-
-# 🏗️ BLUEPRINTS DE CADA CLASE
-
-## **1️⃣ EstadoReto.java**
-```
-UBICACIÓN: src/modelo/EstadoReto.java
-PROPÓSITO: Enum para estados del reto
-CONTENIDO:
-- PENDIENTE
-- EN_CURSO
-- COMPLETADO
-```
-
-## **2️⃣ Resultado.java**
-```
-UBICACIÓN: src/modelo/Resultado.java
-PROPÓSITO: Representa el resultado de un participante en un reto
-ATRIBUTOS:
-- nombreParticipante: String
-- puntosObtenidos: int
-- posicion: int
-MÉTODOS:
-- Constructor completo
-- Getters/Setters
-- toString()
-```
-
-## **3️⃣ Participante.java**
-```
-UBICACIÓN: src/modelo/Participante.java
-PROPÓSITO: Representa un participante del sistema
-ATRIBUTOS:
-- nombre: String (único, identificador)
-MÉTODOS:
-- Constructor
-- Getters/Setters
-- equals() y hashCode() basados en nombre
-- toString()
-NOTA: Los puntos se calculan dinámicamente desde los retos
-```
-
-## **4️⃣ Reto.java**
-```
-UBICACIÓN: src/modelo/Reto.java
-PROPÓSITO: Representa un reto/challenge
-ATRIBUTOS:
-- id: int
-- nombre: String
-- puntosMaximos: int
-- tiempoMinutos: int
-- estado: EstadoReto
-- resultados: List<Resultado>
-MÉTODOS:
-- Constructor completo
-- agregarResultado(Resultado)
-- Getters/Setters
-- toString()
-```
-
-## **5️⃣ Utilidades.java**
-```
-UBICACIÓN: src/util/Utilidades.java
-PROPÓSITO: Métodos utilitarios estáticos
-MÉTODOS:
-- limpiarPantalla(): void
-- emitirSonido(): void
-- formatearTabla(String[][], String[]): String
-- pausar(int segundos): void
-```
-
-## **6️⃣ GestorDatos.java**
-```
-UBICACIÓN: src/servicio/GestorDatos.java
-PROPÓSITO: Persistencia con JSON (Gson)
-ATRIBUTOS:
-- RUTA_DATOS: String = "datos/datos.json"
-- gson: Gson
-CLASE INTERNA:
-- DatosApp {
-    List<Participante> participantes
-    List<Reto> retos
-    int ultimoIdReto
-  }
-MÉTODOS:
-- cargarDatos(): DatosApp
-- guardarDatos(DatosApp): void
-- crearArchivoSiNoExiste(): void
-```
-
-## **7️⃣ GestorParticipantes.java**
-```
-UBICACIÓN: src/servicio/GestorParticipantes.java
-PROPÓSITO: CRUD y lógica de participantes
-ATRIBUTOS:
-- participantes: List<Participante>
-- gestorDatos: GestorDatos
-- gestorRetos: GestorRetos (para calcular puntos)
-MÉTODOS:
-- registrarParticipante(String nombre): boolean
-- eliminarParticipante(String nombre): boolean
-- obtenerParticipante(String nombre): Participante
-- listarParticipantes(): List<Participante>
-- calcularPuntosTotales(String nombre): int
-- existeParticipante(String nombre): boolean
-- obtenerRankingOrdenado(): List<Map.Entry<Participante, Integer>>
-```
-
-## **8️⃣ GestorRetos.java**
-```
-UBICACIÓN: src/servicio/GestorRetos.java
-PROPÓSITO: CRUD y lógica de retos
-ATRIBUTOS:
-- retos: List<Reto>
-- gestorDatos: GestorDatos
-- ultimoId: int
-MÉTODOS:
-- crearReto(String nombre, int puntosMax, int tiempo): Reto
-- obtenerReto(int id): Reto
-- listarRetosPendientes(): List<Reto>
-- listarRetosCompletados(): List<Reto>
-- iniciarReto(int id): boolean
-- agregarParticipanteAlReto(int retoId, String nombreParticipante): boolean
-- finalizarReto(int id): void
-- calcularPuntosDecrecientes(int puntosMax, int posicion): int
-- obtenerPuntosParticipanteEnReto(int retoId, String nombreParticipante): int
-```
-
-## **9️⃣ VistaConsola.java**
-```
-UBICACIÓN: src/vista/VistaConsola.java
-PROPÓSITO: Formateo y visualización
-MÉTODOS ESTÁTICOS:
-- mostrarRanking(List<Map.Entry<Participante, Integer>>): void
-- mostrarRetoEnCurso(Reto, String tiempoRestante): void
-- mostrarHistorial(List<Reto>): void
-- mostrarListaParticipantes(List<Participante>): void
-- mostrarListaRetos(List<Reto>): void
-- dibujarBorde(String titulo): void
-- centrarTexto(String texto, int ancho): String
-```
-
-## **🔟 TimerReto.java**
-```
-UBICACIÓN: src/servicio/TimerReto.java
-PROPÓSITO: Thread para countdown
-ATRIBUTOS:
-- minutos: int
-- segundos: int
-- corriendo: boolean
-- thread: Thread
-MÉTODOS:
-- iniciar(): void
-- detener(): void
-- getTiempoRestante(): String (formato "MM:SS")
-- haTerminado(): boolean
-- run(): void (Runnable)
-```
-
-## **1️⃣1️⃣ MenuPrincipal.java**
-```
-UBICACIÓN: src/vista/MenuPrincipal.java
-PROPÓSITO: Navegación y control de flujo
-ATRIBUTOS:
-- gestorParticipantes: GestorParticipantes
-- gestorRetos: GestorRetos
-- scanner: Scanner
-MÉTODOS:
-- ejecutar(): void (ciclo principal)
-- mostrarMenuPrincipal(): void
-- menuVerRanking(): void
-- menuGestionarParticipantes(): void
-- menuCrearReto(): void
-- menuIniciarReto(): void
-- menuHistorial(): void
-- procesarRetoEnCurso(Reto): void
-```
-
-## **1️⃣2️⃣ Main.java**
-```
-UBICACIÓN: src/Main.java
-PROPÓSITO: Punto de entrada
-CONTENIDO:
-- Inicializar GestorDatos
-- Cargar datos
-- Crear instancias de gestores
-- Crear MenuPrincipal
-- Ejecutar aplicación
-- Guardar datos al salir
-
 

@@ -29,7 +29,6 @@ public class InputReader {
         // TODO: Implementar lectura de comando
         // Leer línea completa, hacer trim y lowercase si es necesario
         // Manejar EOF o interrupciones
-        System.out.print("> ");
         if (!scanner.hasNextLine()) {
             return "salir";
         }

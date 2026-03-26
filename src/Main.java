@@ -6,6 +6,7 @@ import ui.menu.RankingShell;
 public class Main {
     public static void main(String[] args) {
         // Inicializar gestores
+
         GestorDatos gestorDatos = new GestorDatos();
         GestorRetos gestorRetos = new GestorRetos(gestorDatos);
         GestorParticipantes gestorParticipantes = new GestorParticipantes(gestorDatos);
@@ -16,5 +17,6 @@ public class Main {
         // Lanzar interfaz CLI
         RankingShell shell = new RankingShell(gestorRetos, gestorParticipantes);
         shell.start();
+
     }
 }

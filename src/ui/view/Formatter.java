@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import model.Participante;
+import model.Resultado;
 import model.Reto;
 
 /**
@@ -26,10 +27,22 @@ public class Formatter {
      * @return String formateado listo para imprimir
      */
     public static String formatRetosList(List<Reto> retos) {
-        // TODO: Implementar formateo de lista de retos
-        // Debe incluir: ID, Nombre, Estado, Participantes
-        // Usar formato de tabla con bordes
-        return "TODO: Implementar formatRetosList";
+        if (retos.isEmpty()) {
+            return "No hay retos disponibles.";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(header("RETOS DISPONIBLES") + "\n");
+        sb.append(String.format("%-3s %-25s %-8s %-10s %-12s\n", "ID", "Nombre", "Puntos", "Tiempo", "Estado"));
+        sb.append("------------------------------------------------------------\n");
+        for (Reto reto : retos) {
+            sb.append(String.format("%-3d %-25s %-8d %-10s %-12s\n",
+                    reto.getId(),
+                    reto.getNombre().length() > 24 ? reto.getNombre().substring(0, 21) + "..." : reto.getNombre(),
+                    reto.getPuntosMaximos(),
+                    reto.getTiempoMinutos() + " min",
+                    reto.getEstado().toString()));
+        }
+        return sb.toString();
     }
 
     /**
@@ -39,9 +52,25 @@ public class Formatter {
      * @return String con detalles formateados
      */
     public static String formatRetoDetails(Reto reto) {
-        // TODO: Implementar detalles del reto
-        // Incluir: nombre, descripción, puntos, tiempo, estado, participantes
-        return "TODO: Implementar formatRetoDetails";
+        StringBuilder sb = new StringBuilder();
+        sb.append(header("DETALLES DEL RETO") + "\n");
+        sb.append("ID: ").append(reto.getId()).append("\n");
+        sb.append("Nombre: ").append(reto.getNombre()).append("\n");
+        sb.append("Descripción: ").append(reto.getDescripcion() != null ? reto.getDescripcion() : "Sin descripción")
+                .append("\n");
+        sb.append("Puntos máximos: ").append(reto.getPuntosMaximos()).append("\n");
+        sb.append("Tiempo límite: ").append(reto.getTiempoMinutos()).append(" minutos\n");
+        sb.append("Estado: ").append(reto.getEstado().toString()).append("\n");
+        sb.append("Número de resultados: ").append(reto.getResultados().size()).append("\n");
+        if (!reto.getResultados().isEmpty()) {
+            sb.append("\nResultados:\n");
+            for (Resultado resultado : reto.getResultados()) {
+                sb.append("- ").append(resultado.getNombreParticipante())
+                        .append(": ").append(resultado.getPuntosObtenidos()).append(" puntos (Posición: ")
+                        .append(resultado.getPosicion()).append(")\n");
+            }
+        }
+        return sb.toString();
     }
 
     /**
@@ -55,7 +84,7 @@ public class Formatter {
             return "No hay participantes para mostrar en el ranking.";
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("=== RANKING DE PARTICIPANTES ===\n");
+        sb.append(header("RANKING DE PARTICIPANTES") + "\n");
         sb.append(String.format("%-5s %-20s %-10s\n", "Pos", "Nombre", "Puntos"));
         sb.append("-------------------------------------\n");
         int pos = 1;
@@ -72,9 +101,17 @@ public class Formatter {
      * @return String con tabla de participantes
      */
     public static String formatParticipantesList(List<Participante> participantes) {
-        // TODO: Implementar lista de participantes
-        // Número, ID, Nombre
-        return "TODO: Implementar formatParticipantesList";
+        if (participantes.isEmpty()) {
+            return "No hay participantes registrados.";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(header("participantes") + "\n");
+        sb.append(String.format("%-8s %-20s\n", "ID", "Nombre"));
+        sb.append("-----------------------------\n");
+        for (Participante p : participantes) {
+            sb.append(String.format("%-8s %-20s\n", p.getId(), p.getNombre()));
+        }
+        return sb.toString();
     }
 
     /**
@@ -96,9 +133,7 @@ public class Formatter {
      * @return String formateado con color/estilo de éxito
      */
     public static String success(String mensaje) {
-        // TODO: Implementar mensaje de éxito
-        // Usar colores ANSI o símbolos como ✅
-        return "✅ " + mensaje;
+        return "\u001B[32m✅ " + mensaje + "\u001B[32m";
     }
 
     /**
@@ -108,21 +143,17 @@ public class Formatter {
      * @return String formateado con estilo de error
      */
     public static String error(String mensaje) {
-        // TODO: Implementar mensaje de error
-        // Usar colores ANSI o símbolos como ❌
-        return "❌ " + mensaje;
+        return "\u001B[0m❌ " + mensaje + "\u001B[0m";
     }
 
     /**
      * Crea mensaje informativo
      * 
      * @param mensaje Mensaje informativo
-     * @return String formateado
+     * @return String formateado con color naranja
      */
     public static String info(String mensaje) {
-        // TODO: Implementar mensaje informativo
-        // Usar colores ANSI o símbolos como ℹ️
-        return "ℹ️ " + mensaje;
+        return "\033[33mℹ️ " + mensaje + "\033[0m";
     }
 
     /**
@@ -132,8 +163,6 @@ public class Formatter {
      * @return String con encabezado formateado
      */
     public static String header(String titulo) {
-        // TODO: Implementar encabezado
-        // Usar líneas de separación y centrado
         return "=== " + titulo.toUpperCase() + " ===";
     }
 
@@ -144,17 +173,13 @@ public class Formatter {
      * @return String formateado para prompt
      */
     public static String prompt(String prompt) {
-        // TODO: Implementar prompt
-        // Ejemplo: "ranking> "
-        return prompt + "> ";
+        return prompt + " ";
     }
 
     /**
      * Limpia la pantalla de consola
      */
     public static void clearScreen() {
-        // TODO: Implementar limpieza de pantalla
-        // Usar secuencias ANSI o comandos del sistema
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
@@ -165,7 +190,6 @@ public class Formatter {
      * @param segundos Tiempo de pausa
      */
     public static void pause(int segundos) {
-        // TODO: Implementar pausa
         try {
             Thread.sleep(segundos * 1000L);
         } catch (InterruptedException e) {
