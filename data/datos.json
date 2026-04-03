@@ -6,11 +6,15 @@
     },
     {
       "id": "RK002",
+<<<<<<< HEAD
       "nombre": "Jose"
     },
     {
       "id": "RK003",
       "nombre": "Juan"
+=======
+      "nombre": "Alexander"
+>>>>>>> upstream/main
     }
   ],
   "retos": [
@@ -21,6 +25,7 @@
       "puntosMaximos": 100,
       "tiempoMinutos": 1,
       "estado": "EN_CURSO",
+<<<<<<< HEAD
       "resultados": []
     },
     {
@@ -54,4 +59,16 @@
     }
   ],
   "ultimoIdReto": 3
+=======
+      "resultados": [
+        {
+          "nombreParticipante": "Alexander",
+          "puntosObtenidos": 100,
+          "posicion": 1
+        }
+      ]
+    }
+  ],
+  "ultimoIdReto": 1
+>>>>>>> upstream/main
 }
