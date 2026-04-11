@@ -7,87 +7,69 @@ public class TimeReto implements Runnable {
     private Integer minutos;
     private Integer segundos;
     private volatile boolean corriendo;
-    private Thread thread;
+    private Thread  thread;
 
     public TimeReto(int minutos) {
-        this.minutos = minutos;
-        this.segundos = 0;
+        this.minutos   = minutos;
+        this.segundos  = 0;
         this.corriendo = false;
-        this.thread = false;
+        this.thread    = null;
     }
     public void iniciar() {
-        if (!corriendo) return;
-        thread = new Thread(this);
-        corriendo = true;
-        thread.start();
+        if (!corriendo) {
+            thread = new Thread(this);
+            corriendo = true;
+            thread.start();
+        }
     }
 
     public void detener() {
         corriendo = false;
         try {
             thread.join();
-        } catch
-    }
-
-    public void reanudar() {
-        pausado = false;
-    }
-
-    public synchronized void detener() {
-        corriendo = false;
-        if (thread != null) {
-            thread.interrupt();
+        } catch (InterruptedException e) {
+            System.err.println("Error al detener timer: " + e.getMessage());
         }
     }
 
-    public synchronized void reiniciar(int minutos) {
-        detener();
-        this.minutos = minutos;
-        this.segundos = 0;
-        this.pausado = false;
-    }
-
+    /**
+     * Obtiene el tiempo restante formateado
+     * @return String en formato "MM:SS"
+     */
     public String getTiempoRestante() {
         return String.format("%02d:%02d", minutos, segundos);
     }
 
+    /**
+     * Verifica si el timer termino
+     * @return true si llegó a 00:00
+     */
     public boolean haTerminado() {
         return minutos == 0 && segundos == 0;
     }
 
     @Override
     public void run() {
-        while (corriendo && !haTerminado()) {
+        while(corriendo) {
             try {
-
                 Thread.sleep(1000);
 
-                // pausa
-                while (pausado && corriendo) {
-                    Thread.sleep(200);
+                if (segundos > 0) {
+                    segundos--;
+                } else {
+                    if (minutos > 0) {
+                        minutos--;
+                        segundos = 59;
+                    } else {
+                        corriendo = false;
+                        emitirSonido();
+                        break;
+                    }
                 }
-
-                decrementarTiempo();
-
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
+                System.err.println("Timer interrupimpido: " + e.getMessage());
+                corriendo = false;
             }
-        }
-
-        if (haTerminado()) {
-            emitirSonido();
-        }
-
-        corriendo = false;
-    }
-
-    private void decrementarTiempo() {
-        if (segundos > 0) {
-            segundos--;
-        } else if (minutos > 0) {
-            minutos--;
-            segundos = 59;
         }
     }
 }
