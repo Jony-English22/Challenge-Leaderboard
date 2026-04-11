@@ -6,6 +6,12 @@
     },
     {
       "id": "RK002",
+
+      "nombre": "Jose"
+    },
+    {
+      "id": "RK003",
+      "nombre": "Juan"
       "nombre": "Alexander"
     }
   ],
@@ -17,6 +23,39 @@
       "puntosMaximos": 100,
       "tiempoMinutos": 1,
       "estado": "EN_CURSO",
+      "resultados": []
+    },
+    {
+      "id": 2,
+      "nombre": "INDGBL",
+      "descripcion": "ESTUDIANTE",
+      "puntosMaximos": 100,
+      "tiempoMinutos": 30,
+      "estado": "EN_CURSO",
+      "resultados": [
+        {
+          "nombreParticipante": "Juan",
+          "puntosObtenidos": 100,
+          "posicion": 1
+        },
+        {
+          "nombreParticipante": "Jose",
+          "puntosObtenidos": 99,
+          "posicion": 2
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "nombre": "2vs2",
+      "descripcion": "Sin descripción",
+      "puntosMaximos": 100,
+      "tiempoMinutos": 5,
+      "estado": "PENDIENTE",
+      "resultados": []
+    }
+  ],
+  "ultimoIdReto": 3
       "resultados": [
         {
           "nombreParticipante": "Alexander",

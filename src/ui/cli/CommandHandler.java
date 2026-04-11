@@ -436,7 +436,7 @@ public class CommandHandler {
         List<Participante> participantes = gestorParticipantes.listarParticipantes();
 
         if (index < 0 || index >= participantes.size()) {
-            consoleView.showError("Índice de participante inválido");
+            consoleView.showError("Índice de participante i¿nválido");
             return;
         }
 
