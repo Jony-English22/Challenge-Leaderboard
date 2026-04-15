@@ -1,8 +1,9 @@
 ¡Gracias por contribuir a [Challenge Leaderboard](https://github.com/Jony-English22/Challenge-Leaderboard)! 🚀
 
-## Descripción
+## Descripción:
+
 > **Nota:** Sé claro y directo. Explica brevemente el **qué** (qué funcionalidad o lógica cambia) y el **por qué** (qué problema resuelve este cambio).
-## Relacionado con
+## Relacionado con:
 > **Nota:** Indica el número del reporte o tarea (Issue) que estás trabajando. Si no existe uno, puedes dejarlo en blanco o crear uno antes de enviar el PR.
 ## Tipo de cambio
 - [ ] 🐛 Bug fix (corrección de errores)

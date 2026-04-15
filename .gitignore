@@ -39,3 +39,6 @@ replay_pid*
 target/
 apache-maven-3.9.14/
 maven.zip
+
+#Environment variables
+.env
