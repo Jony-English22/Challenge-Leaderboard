@@ -19,7 +19,7 @@ package ui.cli;
                 throw new IllegalArgumentException("El contexto no puede estar vacío");
             }
 
-            this.usuario = usuario.trim();
+            this.usuario  =  usuario.trim();
             this.contexto = contexto.trim();
         }
 
