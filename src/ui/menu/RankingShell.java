@@ -4,6 +4,7 @@ import service.GestorParticipantes;
 import service.GestorRetos;
 import ui.cli.CommandHandler;
 import ui.cli.InputReader;
+import ui.cli.PromptRenderingCore;
 import ui.view.ConsoleView;
 import ui.view.Formatter;
 
@@ -23,11 +24,13 @@ public class RankingShell {
     private final CommandHandler commandHandler;
     private final ConsoleView consoleView;
     private final Formatter formatter;
+    private PromptRenderingCore promptCore;
 
     public RankingShell(GestorRetos gestorRetos, GestorParticipantes gestorParticipantes) {
         this.inputReader = new InputReader();
         this.consoleView = new ConsoleView();
         this.formatter = new Formatter();
+        this.promptCore = new PromptRenderingCore("usuario", "ranking");
         this.commandHandler = new CommandHandler(gestorRetos, gestorParticipantes, consoleView, inputReader, formatter);
     }
 
@@ -46,7 +49,7 @@ public class RankingShell {
 
         while (commandHandler.isRunning()) {
             try {
-                consoleView.showPrompt();
+                promptCore.render();
                 String command = inputReader.readCommand();
 
                 if (!commandHandler.processCommand(command)) {
